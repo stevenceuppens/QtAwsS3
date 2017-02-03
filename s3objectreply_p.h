@@ -9,10 +9,15 @@ class S3ObjectReplyPrivate
 
 public:
     S3ObjectReplyPrivate(S3ObjectReply *_q)
-        : q_ptr(_q)
+        : q_ptr(_q), m_reply(nullptr)
     {}
 
-private:
+    virtual ~S3ObjectReplyPrivate(){
+        if(m_reply){
+            m_reply->deleteLater();
+        }
+    }
+
     S3ObjectReply *q_ptr;
     QNetworkReply *m_reply;
 };

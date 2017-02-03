@@ -19,8 +19,17 @@ public:
 
 public:
     bool isFinished() const;
-    bool isRunning() const;
+    bool isRunning() const;    
     QByteArray readAll();
+
+
+
+
+private:
+
+    void handleSSLErrors(const QList<QSslError> aErrors);
+
+
 
 signals:
     void finished();
