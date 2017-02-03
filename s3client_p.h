@@ -44,9 +44,13 @@ private:
         if (!data.isEmpty()) {
             const QByteArray md5 = QCryptographicHash::hash(data, QCryptographicHash::Md5);
             canonicalString << QString(md5) << endl;
-            canonicalString << QStringLiteral("application/vnd.ms-pkistl") << endl;
+            request.setRawHeader("Content-Md5", QString(md5).toLatin1());
+            canonicalString << QStringLiteral("application/x-binary") << endl;
+            request.setRawHeader("Content-Type", "application/x-binary");
         }
-        canonicalString << QDateTime::currentDateTime().toString() << endl;
+        const QString date = QDateTime::currentDateTime().toUTC().toString();
+        canonicalString << date << endl;
+        request.setRawHeader("Date", date.toLatin1());
 
         const QByteArray signature = hmacSha1(m_accessKeySecret.toLatin1(), canonicalString.join("").toLatin1());
         const QString header = "AWS " + m_accessKeyID + ":" + QString(signature);
